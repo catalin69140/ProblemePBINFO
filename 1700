@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 struct triplet
@@ -37,76 +38,92 @@ void construireMatriceRara()
     c.nr_coloane=b.nr_coloane;
     c.nr_triplete=0;
 
-    unsigned ordinTriplet_a = 0, ordinTriplet_b = 0;
+    unsigned ordinTriplet_a=0,ordinTriplet_b=0;
 
-    while(ordinTriplet_a < a.numarTriplete && ordinTriplet_b < b.numarTriplete)
+    while(ordinTriplet_a < a.nr_triplete && ordinTriplet_b < b.nr_triplete)
     {
-
         // tripletul actual din a este mai mic decat tripletul actual din b
         if(maiMicLexicografic(a.t[ordinTriplet_a], b.t[ordinTriplet_b]))
         {
-
             // il inserez in c si trec mai departe cu tripletul a
-            c.t[c.numarTriplete] = a.t[ordinTriplet_a++];
+            c.t[c.nr_triplete] = a.t[ordinTriplet_a++];
         }
         else
         {
-
             // la fel ca if-ul de mai sus, doar ca pentru b
-            if(maiMicLexicografic(b.t[ordinTriplet_b], a.t[ordinTriplet_a]))
+            if(maiMicLexicografic(b.t[ordinTriplet_b],a.t[ordinTriplet_a]))
             {
-                c.t[c.numarTriplete] = b.t[ordinTriplet_b++];
+                c.t[c.nr_triplete]=b.t[ordinTriplet_b++];
             }
             else   // tripletele sunt egale
             {
 
-                if(b.t[ordinTriplet_b].valoare + a.t[ordinTriplet_a].valoare != 0)   // verific sa nu fie nenula valoarea care vreau sa o inserez
+                if(b.t[ordinTriplet_b].valoare+a.t[ordinTriplet_a].valoare!=0)   // verific sa nu fie nenula valoarea care vreau sa o inserez
                 {
 
-                    c.t[c.numarTriplete].linie = a.t[ordinTriplet_a].linie;
-                    c.t[c.numarTriplete].coloana = a.t[ordinTriplet_a].coloana;
-                    c.t[c.numarTriplete].valoare = b.t[ordinTriplet_b].valoare + a.t[ordinTriplet_a].valoare;
+                    c.t[c.nr_triplete].linie=a.t[ordinTriplet_a].linie;
+                    c.t[c.nr_triplete].coloana=a.t[ordinTriplet_a].coloana;
+                    c.t[c.nr_triplete].valoare=b.t[ordinTriplet_b].valoare+a.t[ordinTriplet_a].valoare;
 
                     ordinTriplet_a++; // mergem mai departe cu tripletele a si b
                     ordinTriplet_b++;
                 }
             }
         }
-
-        c.numarTriplete++;
+        c.nr_triplete++;
     }
 
     // copiez tripletele ramase in a si b
-    while(ordinTriplet_a < a.numarTriplete)
+    while(ordinTriplet_a < a.nr_triplete)
     {
-        c.t[c.numarTriplete++] = a.t[ordinTriplet_a++];
+        c.t[c.nr_triplete++] = a.t[ordinTriplet_a++];
     }
 
-    while(ordinTriplet_b < b.numarTriplete)
+    while(ordinTriplet_b < b.nr_triplete)
     {
-        c.t[c.numarTriplete++] = b.t[ordinTriplet_b++];
+        c.t[c.nr_triplete++] = b.t[ordinTriplet_b++];
     }
 
     // sortez tripletele din c pentru a fi in ordine lexicografica
-    std::sort(c.t, c.t + c.numarTriplete, maiMicLexicografic);
+    std::sort(c.t,c.t+c.nr_triplete,maiMicLexicografic);
 }
 
 void afisareMatriceRara()
 {
     cout<<"c.nr_linii = "<<c.nr_linii<<"; "<<"c.nr_coloane = "<<c.nr_coloane<<"; "<<"c.nr_triplete = "<<c.nr_triplete<<";";
-    for(unsigned i=0; i<c.numarTriplete; i++)
+    cout<<"c.t = ";
+    for(unsigned i=0; i<c.nr_triplete; i++)
     {
-        fout<<c.t[i].linie<<' '<<c.t[i].coloana<<' '<<c.t[i].valoare<<'\n';
+        if(i==0)
+        {
+            cout<<"{";
+            
+        }
+        cout<<"{"<<c.t[i].linie<<", "<<c.t[i].coloana<<", "<<c.t[i].valoare<<"}";
+        if(i<nr_triplete-1)
+        {
+            cout<<",";
+        }
+        if(i==nr_triplete-1)
+        {
+            cout<<"};";
+            return 0;
+        }
+        cout<<'\n';
+        cout<<"       ";
     }
 }
 
 
-void inmultire(matrice_rara a, matrice_rara b, matrice_rara &c)
+void inmultire(matrice_rara a,matrice_rara b,matrice_rara &c)
 {
 
 }
 
 int main()
 {
-
+    citireMatrici();
+    construireMatriceRara();
+    afisareMatriceRara();
+    return 0;
 }
